@@ -1,12 +1,28 @@
 from PySide6.QtCore import QSize, Qt, Signal, QObject # Import some QtCore stuff
-from PySide6.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QPushButton, QLabel, QWidget, QDialog, QFileDialog, QTabWidget, QListWidget, QListWidgetItem # Import Qt widgets
+from PySide6.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QPushButton, QLabel, QWidget, QDialog, QFileDialog, QTabWidget, QListWidget, QListWidgetItem, QMessageBox # Import Qt widgets
 import sys # Import OS libraries  like exit
 import tomllib # Import TOML parser
 import os # Import filesystem management
 import re # Regex lib.
+import subprocess # For starting files on *Nix, so Mac, Linux, Unix, BSD- I think you get it just for Posix compliant systems.
 class TomlSignal(QObject):
     toml_loaded = Signal(dict, str) # Create a signal bus to carry TOML between classes.
 TomlSignalInstance = TomlSignal() # Create an instance of the signal bus.
+def openFile(path):
+    if sys.platform.startswith("darwin"): # I see, a man of wisdom. (MacOS)
+        subprocess.run(["open", path])
+    elif os.name == "nt": # Oh, you sweet summer child. (Windows)
+        os.startfile(path)
+    elif os.name == "posix": # This deals with most OSes. (Posix Compliant except Mac.)
+        subprocess.run(["xdg-open", path])
+    else: # If you get this, what the heck are you running?
+        QMessageBox.warning(None, "I don't recognize this OS! This script can't run files on your machine.")
+def itemSelect(item):
+    path = item.data(256)
+    if path and os.path.exists(path):
+        openFile(path)
+    else:
+        QMessageBox.warning(None, "404 Not Found.", f"Can't find file:\n{path}")
 class ManagmentWindow(QMainWindow): # Create a window to operate in.
     def __init__(self, signal_bus):
         super().__init__()
@@ -54,6 +70,7 @@ class ManagmentWindow(QMainWindow): # Create a window to operate in.
                 item = QListWidgetItem(smallPath)
                 item.setData(256, path)
                 widget.addItem(item)
+            widget.itemDoubleClicked.connect(itemSelect)
             layout.addWidget(widget)
             self.uiWidget.addTab(tab, key)
             self.setCentralWidget(self.uiWidget)
