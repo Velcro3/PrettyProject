@@ -1,5 +1,5 @@
 # Pretty Project
-This is a video management tool, for when you have countless files and need organizing.
+This is a project management tool, for when you have countless files and need organizing.
 ## Usage
 To run, just run the python script!
 ### Configuring
@@ -11,7 +11,8 @@ Then, to tell Pretty Project how to find files, use regex. This only applies to 
 Regex has 2 modes implemented. `some` and `all`. Some allows the regex to match anywhere in the filename. All needs the full name to match.
 Configure regex like this: `regex = {match = .doc, mode = some}`
 Example file:
-`
+```
+```
 [project]
 name = "Toml Test"
 [[type]]
@@ -20,7 +21,7 @@ regex = {match = ".ntp", mode = "some"}
 [[type]]
 name = "Olive project"
 regex = {match = "[A-Z]*[a-z]*[0-9]*.ove", mode = "all"}
-`
+```
 ## Roadmap
 - [x] Make a working welcome prompt
 - [x] Make a file picker
