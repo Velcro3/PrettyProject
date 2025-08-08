@@ -11,4 +11,7 @@ Use a file at the project root called project.toml to configure.
 - [x] Create a second window
 - [x] Make a way for the second window to read the TOML
 - [x] Confirm a working title
-- [ ] Finalize TOML
+- [x] Finalize TOML
+- [x] Create the UI for opening files
+- [ ] Actually open files
+- [ ] Finish this README.
