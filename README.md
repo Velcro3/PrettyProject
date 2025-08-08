@@ -1,4 +1,4 @@
-# PyVidMan
+# Pretty Project
 This is a video management tool, for when you have countless files and need organizing.
 ## Usage
 To run, just run the python script!
