@@ -2,6 +2,12 @@
 This is a project management tool, for when you have countless files and need organizing.
 ## Usage
 To run, just run the python script!
+### Requirements
+- Python 3.11+
+- PySide 6
+If PySide is missing, use pip to install it. `pip install pyside6`
+
+PySide6 is the library used for Qt bindings here.
 ### Configuring
 Use a file at the project root called project.toml to configure.
 #### Syntax
