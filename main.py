@@ -26,7 +26,7 @@ def itemSelect(item):
 class ManagmentWindow(QMainWindow): # Create a window to operate in.
     def __init__(self, signal_bus):
         super().__init__()
-        self.setWindowTitle("PyVidMan Project: Unknown") # Placeholder title.
+        self.setWindowTitle("Pretty Project: Unknown") # Placeholder title.
         self.label = QLabel("Waiting for input") 
         layout = QVBoxLayout()
         layout.addWidget(self.label)
@@ -35,7 +35,7 @@ class ManagmentWindow(QMainWindow): # Create a window to operate in.
         self.setCentralWidget(widget)
         signal_bus.toml_loaded.connect(self.gottoml)
     def gottoml(self, data: dict, path: str):
-        self.setWindowTitle("PyVidMan Project: " + data["project"]["name"])
+        self.setWindowTitle("Pretty Project: " + data["project"]["name"])
         self.loadtoml(data, path)
         self.show()
     def loadtoml(self, data: dict, path: str):
@@ -81,9 +81,9 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.signal_bus = signal_bus
         self.setMinimumSize(800, 600)
-        self.setWindowTitle("PyVidMan")
+        self.setWindowTitle("Pretty Project")
         layout = QVBoxLayout()
-        title = QLabel("Welcome to PyVidMan. Click the button to open a project")
+        title = QLabel("Welcome to Pretty Project. Click the button to open a project")
         layout.addWidget(title)
         self.button = QPushButton("Load Project")
         self.button.clicked.connect(self.load)
@@ -101,7 +101,8 @@ class MainWindow(QMainWindow):
 app = QApplication(sys.argv)
 mgmtWindow = ManagmentWindow(TomlSignalInstance)
 window = MainWindow(TomlSignalInstance)
-window.setWindowTitle("PyVidMan")
+window.setWindowTitle("Pretty Project")
 window.resize(800, 600)
+mgmtWindow.resize(800, 600)
 window.show()
 app.exec()
