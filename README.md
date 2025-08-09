@@ -17,6 +17,7 @@ Types are configured under `[[type]]`. Set a type name with `name = <type name h
 Then, to tell Pretty Project how to find files, use regex. This only applies to the name of the file, **not folder**.
 Regex has 2 modes implemented. `some` and `all`. Some allows the regex to match anywhere in the filename. All needs the full name to match.
 Configure regex like this: `regex = {match = .doc, mode = some}`
+Ignoring files is done under `[ignore]` and follows this format: `ignoreme = "some"`. ignoreme is a RegEx field to tell Pretty Project how to find files to ignore, and "some" is the same as for include. Ignore has precedence over exclude, so with the example config below, ignoreme.ove would be ignored.
 Example file:
 
 ```
@@ -28,6 +29,8 @@ regex = {match = ".ntp", mode = "some"}
 [[type]]
 name = "Olive project"
 regex = {match = "[A-Z]*[a-z]*[0-9]*.ove", mode = "all"}
+[ignore]
+ignoreme = some
 ```
 ## Roadmap
 - [x] Make a working welcome prompt

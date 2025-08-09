@@ -5,6 +5,15 @@ import tomllib # Import TOML parser
 import os # Import filesystem management
 import re # Regex lib.
 import subprocess # For starting files on *Nix, so Mac, Linux, Unix, BSD- I think you get it just for Posix compliant systems.
+def ignore(path: str, list: dict):
+    for rule, mode in list.items():
+        if mode == "some":
+            if re.search(rule, path):
+                return True
+        else:
+            if re.fullmatch(rule, path):
+                return True
+    return False
 class TomlSignal(QObject):
     toml_loaded = Signal(dict, str) # Create a signal bus to carry TOML between classes.
 TomlSignalInstance = TomlSignal() # Create an instance of the signal bus.
@@ -50,14 +59,22 @@ class ManagmentWindow(QMainWindow): # Create a window to operate in.
                 compiledRegex = re.compile(regexMatch)
                 for dirname, _, files in os.walk(dir):
                     for file in files:
-                        if compiledRegex.search(file):
-                            fileMatcher[name].append(os.path.join(dirname, file))
+                        if "ignore" in data:
+                            if compiledRegex.search(file) and not ignore(file, data["ignore"]):
+                                fileMatcher[name].append(os.path.join(dirname, file))
+                        else:
+                            if compiledRegex.search(file):
+                                fileMatcher[name].append(os.path.join(dirname, file))
             else:
                 compiledRegex = re.compile(regexMatch)
                 for dirname, _, files in os.walk(dir):
                     for file in files:
-                        if compiledRegex.fullmatch(file):
-                            fileMatcher[name].append(os.path.join(dirname, file))
+                        if "ignore" in data:
+                            if compiledRegex.fullmatch(file) and not ignore(file, data["ignore"]):
+                                fileMatcher[name].append(os.path.join(dirname, file))
+                        else:
+                            if compiledRegex.fullmatch(file):
+                                fileMatcher[name].append(os.path.join(dirname, file))
         self.createUI(fileMatcher, dir)
     def createUI(self, files: dict, basepath: str):
         self.uiWidget = QTabWidget()
