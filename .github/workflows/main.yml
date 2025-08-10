@@ -34,4 +34,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: prettyproject-${{ matrix.os }}
-          path: dist/your_script${{ runner.os == 'Windows' && '.exe' || '' }}
+          path: dist/main${{ runner.os == 'Windows' && '.exe' || '' }}
