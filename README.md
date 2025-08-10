@@ -9,6 +9,8 @@ To run, just run the python script!
 If PySide is missing, use pip to install it. `pip install pyside6`
 
 PySide6 is the library used for Qt bindings here.
+
+You can also use the binaries in releases that were introduced in v1.1 bugfix 1. Note that the Windows and Mac binaries are BEST EFFORT, as I only have access to Linux because I don't use them. I have confirmed the binaries to work, at least on Linux.
 ### Configuring
 Use a file at the project root called project.toml to configure.
 #### Syntax
@@ -17,7 +19,7 @@ Types are configured under `[[type]]`. Set a type name with `name = <type name h
 Then, to tell Pretty Project how to find files, use regex. This only applies to the name of the file, **not folder**.
 Regex has 2 modes implemented. `some` and `all`. Some allows the regex to match anywhere in the filename. All needs the full name to match.
 Configure regex like this: `regex = {match = .doc, mode = some}`
-Ignoring files is done under `[ignore]` and follows this format: `ignoreme = "some"`. ignoreme is a RegEx field to tell Pretty Project how to find files to ignore, and "some" is the same as for include. Ignore has precedence over exclude, so with the example config below, ignoreme.ove would be ignored.
+Ignoring files is done under `[ignore]` and follows this format: `ignoreme = "some"`. ignoreme is a RegEx field to tell Pretty Project how to find files to ignore, and "some" is the same as for include. Ignore has precedence over include, so with the example config below, ignoreme.ove would be ignored.
 Example file:
 
 ```
@@ -43,3 +45,4 @@ ignoreme = some
 - [x] Create the UI for opening files
 - [x] Actually open files
 - [x] Finish this README.
+- [x] Make binaries.
