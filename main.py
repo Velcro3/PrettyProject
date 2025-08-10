@@ -22,8 +22,12 @@ def openFile(path):
         subprocess.run(["open", path])
     elif os.name == "nt": # Oh, you sweet summer child. (Windows)
         os.startfile(path)
-    elif os.name == "posix": # This deals with most OSes. (Posix Compliant except Mac.)
-        subprocess.run(["xdg-open", path])
+    elif os.name == "posix": # This deals with most OSes. (Posix Compliant except Mac.) Complex, because Qt conflicts.
+        openEnv = os.environ.copy()
+        openEnv.pop('LD_LIBRARY_PATH', None)
+        openEnv.pop('QT_PLUGIN_PATH', None)
+        openEnv.pop('QT_QPA_PLATFORM_PLUGIN_PATH', None)
+        subprocess.run(["xdg-open", path], env=openEnv)
     else: # If you get this, what the heck are you running?
         QMessageBox.warning(None, "I don't recognize this OS! This script can't run files on your machine.")
 def itemSelect(item):
