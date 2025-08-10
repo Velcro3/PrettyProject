@@ -36,11 +36,8 @@ jobs:
           name: prettyproject-${{ matrix.os }}
           path: dist/main${{ runner.os == 'Windows' && '.exe' || '' }}
   build-for-intel-mac:
-    runs-on: mac-latest
+    runs-on: mac-12
     steps:
-      - name: Set up Homebrew
-        id: set-up-homebrew
-        uses: Homebrew/actions/setup-homebrew@main
       - uses: actions/checkout@v3
       - name: Setup Python
         run: |
