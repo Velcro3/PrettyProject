@@ -10,7 +10,15 @@ If PySide is missing, use pip to install it. `pip install pyside6`
 
 PySide6 is the library used for Qt bindings here.
 
-You can also use the binaries in releases that were introduced in v1.1 bugfix 1. Note that the Windows and Mac binaries are BEST EFFORT, as I only have access to Linux because I don't use them. I have confirmed the binaries to work, at least on Linux.
+You can also use the binaries in releases that were introduced in v1.1 bugfix 1. Note that the Windows and Mac Silicon binaries are BEST EFFORT, as I only have access to Linux and Intel Mac. I have confirmed the binaries to work, at least on Linux/Intel Mac.
+#### Note for Mac binaries
+Follow these steps to make Mac run the app. You only need to do this once.
+- Rename the file from .appfile to .app
+- Right click (if on macbook this translates to ctrl+click) the file.
+- Click Open in the context menu.
+- Click Open in the warning.
+After this, Mac will just run it without asking.
+The reason it is .appfile, and not just .app is because GitHub releases don't allow you to upload files with the .app extension.
 ### Configuring
 Use a file at the project root called project.toml to configure.
 #### Syntax
