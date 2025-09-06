@@ -54,3 +54,6 @@ ignoreme = some
 - [x] Actually open files
 - [x] Finish this README.
 - [x] Make binaries.
+- [x] Actually manage files.
+# NOTE FOR USERS!
+This software is GPLv3. Read LICENSE for info.

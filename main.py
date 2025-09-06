@@ -1,5 +1,5 @@
 from PySide6.QtCore import QSize, Qt, Signal, QObject # Import some QtCore stuff
-from PySide6.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QPushButton, QLabel, QWidget, QDialog, QFileDialog, QTabWidget, QListWidget, QListWidgetItem, QMessageBox # Import Qt widgets
+from PySide6.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QPushButton, QLabel, QWidget, QDialog, QFileDialog, QTabWidget, QListWidget, QListWidgetItem, QMessageBox, QInputDialog # Import Qt widgets
 import sys # Import OS libraries  like exit
 import tomllib # Import TOML parser
 import os # Import filesystem management
@@ -30,7 +30,13 @@ def openFile(path):
         subprocess.run(["xdg-open", path], env=openEnv)
     else: # If you get this, what the heck are you running?
         QMessageBox.warning(None, "I don't recognize this OS! This script can't run files on your machine.")
-def itemSelect(item):
+def itemSelect(item, dpath):
+    if dpath and os.path.exists(dpath):
+        openFile(dpath)
+        return
+    elif dpath and not os.path.exists(dpath):
+        QMessageBox.warning(None, "404 Not Found.", f"Can't find file:\n{path}")
+        return
     path = item.data(256)
     if path and os.path.exists(path):
         openFile(path)
@@ -48,6 +54,8 @@ class ManagmentWindow(QMainWindow): # Create a window to operate in.
         self.setCentralWidget(widget)
         signal_bus.toml_loaded.connect(self.gottoml)
     def gottoml(self, data: dict, path: str):
+        self.data = data
+        self.path = path
         self.setWindowTitle("Pretty Project: " + data["project"]["name"])
         self.loadtoml(data, path)
         self.show()
@@ -91,12 +99,47 @@ class ManagmentWindow(QMainWindow): # Create a window to operate in.
                 item = QListWidgetItem(smallPath)
                 item.setData(256, path)
                 widget.addItem(item)
-            widget.itemDoubleClicked.connect(itemSelect)
+            widget.itemDoubleClicked.connect(lambda item: itemSelect(item, None))
+            widget.setContextMenuPolicy(Qt.CustomContextMenu)
+
+            widget.customContextMenuRequested.connect(lambda pos, w=widget: self.openOptions(pos, w))
             layout.addWidget(widget)
             self.uiWidget.addTab(tab, key)
-            self.setCentralWidget(self.uiWidget)
-
-
+            self.layout = QVBoxLayout()
+            self.layout.addWidget(self.uiWidget)
+            self.btn_rel = QPushButton("Reload")
+            self.btn_rel.clicked.connect(self.reloadUI)
+            self.layout.addWidget(self.btn_rel)
+            self.displayWidget = QWidget()
+            self.displayWidget.setLayout(self.layout)
+            self.setCentralWidget(self.displayWidget)
+    def openOptions(self, pos, widget):
+        item = widget.itemAt(pos)
+        path = item.data(256)
+        menu = QMessageBox()
+        menu.setWindowTitle("Context menu")
+        menu.setText("Pick one option:")
+        btn_ren = menu.addButton("Rename", QMessageBox.ActionRole)
+        btn_del = menu.addButton("Delete", QMessageBox.ActionRole)
+        btn_ope = menu.addButton("Open", QMessageBox.ActionRole)
+        btn_can = menu.addButton("Cancel", QMessageBox.ActionRole)
+        menu.exec()
+        option = menu.clickedButton()
+        if option is btn_ren:
+            relpath = os.path.relpath(path, self.path)
+            newname, ok = QInputDialog.getText(None, f"Rename {relpath} to...", "Enter text:")
+            if ok:
+                pathname = os.path.dirname(path)
+                pathname = os.path.join(pathname, newname)
+                os.rename(path, pathname)
+                self.reloadUI(path)
+        elif option is btn_del:
+            os.remove(path)
+            self.reloadUI(path)
+        elif option is btn_ope:
+            itemSelect(None, path)
+    def reloadUI(self, _):
+        self.gottoml(self.data, self.path)
 class MainWindow(QMainWindow):
     def __init__(self, signal_bus):
         super().__init__()
