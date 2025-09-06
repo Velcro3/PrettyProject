@@ -115,9 +115,10 @@ class ManagmentWindow(QMainWindow): # Create a window to operate in.
             self.setCentralWidget(self.displayWidget)
     def openOptions(self, pos, widget):
         item = widget.itemAt(pos)
+        relative = item.data(0)
         path = item.data(256)
         menu = QMessageBox()
-        menu.setWindowTitle("Context menu")
+        menu.setWindowTitle(f"Context menu for {relative}")
         menu.setText("Pick one option:")
         btn_ren = menu.addButton("Rename", QMessageBox.ActionRole)
         btn_del = menu.addButton("Delete", QMessageBox.ActionRole)
