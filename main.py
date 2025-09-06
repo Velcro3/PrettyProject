@@ -35,7 +35,7 @@ def itemSelect(item, dpath):
         openFile(dpath)
         return
     elif dpath and not os.path.exists(dpath):
-        QMessageBox.warning(None, "404 Not Found.", f"Can't find file:\n{path}")
+        QMessageBox.warning(None, "404 Not Found.", f"Can't find file:\n{dpath}")
         return
     path = item.data(256)
     if path and os.path.exists(path):
@@ -88,6 +88,9 @@ class ManagmentWindow(QMainWindow): # Create a window to operate in.
                             if compiledRegex.fullmatch(file):
                                 fileMatcher[name].append(os.path.join(dirname, file))
         self.createUI(fileMatcher, dir)
+    def openConfig(self, _):
+        path = self.path
+        itemSelect(None, path)
     def createUI(self, files: dict, basepath: str):
         self.uiWidget = QTabWidget()
         for key, value in files.items():
@@ -110,6 +113,9 @@ class ManagmentWindow(QMainWindow): # Create a window to operate in.
             self.btn_rel = QPushButton("Reload")
             self.btn_rel.clicked.connect(self.reloadUI)
             self.layout.addWidget(self.btn_rel)
+            self.btn_cfg = QPushButton("Open configuration")
+            self.btn_cfg.clicked.connect(self.openConfig)
+            self.layout.addWidget(self.btn_cfg)
             self.displayWidget = QWidget()
             self.displayWidget.setLayout(self.layout)
             self.setCentralWidget(self.displayWidget)
